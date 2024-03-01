@@ -62,11 +62,13 @@ export default function DemoForm() {
   const watchChoices = watch("choices");
 
   function onSave(data) {
-    const isDefaultIsPresent = data.choices.find((c) => c === data.default.trim());
+    const isDefaultIsPresent = data.choices.find(
+      (c) => c === data.default.trim()
+    );
 
     if (!isDefaultIsPresent) {
       alert("default value should be present in the choice");
-      return
+      return;
     }
     const reqBody = { ...data, displayAlpha: data.displayAlpha === 1 };
 
@@ -122,7 +124,9 @@ export default function DemoForm() {
   }
 
   function handleChoiceDelete(choice) {
-    const filterChoices = watchChoices.filter((elChoice) => elChoice !== choice);
+    const filterChoices = watchChoices.filter(
+      (elChoice) => elChoice !== choice
+    );
     setValue("choices", filterChoices);
   }
 
@@ -138,8 +142,13 @@ export default function DemoForm() {
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit(onSave)}>
         <Box border="1px solid skyblue" borderRadius="0.5em" mt={15}>
-          <Box bgcolor="#beecff" py={2} borderRadius="0.5em 0.5em 0 0" borderBottom="1px solid skyblue">
-            <Typography variant="h6" pl={3} color='#005678'>
+          <Box
+            bgcolor="#beecff"
+            py={2}
+            borderRadius="0.5em 0.5em 0 0"
+            borderBottom="1px solid skyblue"
+          >
+            <Typography variant="h6" pl={3} color="#005678">
               Field Builder
             </Typography>
           </Box>
@@ -178,7 +187,12 @@ export default function DemoForm() {
                   control={control}
                   name="required"
                   render={({ field }) => {
-                    return <FormControlLabel control={<Checkbox {...field} />} label="A Value is required" />;
+                    return (
+                      <FormControlLabel
+                        control={<Checkbox {...field} />}
+                        label="A Value is required"
+                      />
+                    );
                   }}
                 />
               </Grid>
@@ -191,16 +205,30 @@ export default function DemoForm() {
                   control={control}
                   name="default"
                   render={({ field, fieldState: { error } }) => {
-                    return <TextField size="small" {...field} helperText={error?.message} error={!!error} inputProps={{ maxLength: 40 }} />;
+                    return (
+                      <TextField
+                        size="small"
+                        {...field}
+                        helperText={error?.message}
+                        error={!!error}
+                        inputProps={{ maxLength: 40 }}
+                      />
+                    );
                   }}
                 />
                 <Button
                   color="primary"
                   onClick={handleAddChoice}
-                  sx={{ "&.MuiButton-root": { textTransform: "capitalize", height: 40 }, ml: 2 }}
+                  sx={{
+                    "&.MuiButton-root": {
+                      textTransform: "capitalize",
+                      height: 40,
+                    },
+                    ml: 2,
+                  }}
                   variant="outlined"
                 >
-                  <Add/> <Typography>Add</Typography>
+                  <Add /> <Typography>Add</Typography>
                 </Button>
               </Grid>
 
@@ -210,27 +238,56 @@ export default function DemoForm() {
               <Grid item xs={12} sm={6} md={8} lg={8}>
                 {!watchChoices.length ? (
                   <>
-                    <Box sx={{ border: "1px solid", borderColor: "divider", p: 1, borderRadius: 1 }}>
+                    <Box
+                      sx={{
+                        border: "1px solid",
+                        borderColor: "divider",
+                        p: 1,
+                        borderRadius: 1,
+                      }}
+                    >
                       <Typography variant="caption" color="text.secondary">
-                        Please add some choices from the default values input field by clicking the <b>Add</b> button.
+                        Please add some choices from the default values input
+                        field by clicking the <b>Add</b> button.
                       </Typography>
                     </Box>
-                    {errors.choices && <FormHelperText error={!!errors.choices}> {errors.choices?.message}</FormHelperText>}
+                    {errors.choices && (
+                      <FormHelperText error={!!errors.choices}>
+                        {" "}
+                        {errors.choices?.message}
+                      </FormHelperText>
+                    )}
                   </>
                 ) : (
-                  <List sx={{ border: "1px solid", borderColor: "divider", borderRadius: 1 }}>
+                  <List
+                    sx={{
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
                     {watchChoices.map((choice) => (
                       <ListItem
                         key={choice}
                         disablePadding
                         secondaryAction={
-                          <IconButton size="small" edge="end" tittle="Delete" aria-label="delete" color="error"
-                            onClick={() => handleChoiceDelete(choice)}>
+                          <IconButton
+                            size="small"
+                            edge="end"
+                            tittle="Delete"
+                            aria-label="delete"
+                            color="error"
+                            onClick={() => handleChoiceDelete(choice)}
+                          >
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         }
                       >
-                        <ListItemButton dense title="Delete choice" onClick={() => handleChoiceDelete(choice)}>
+                        <ListItemButton
+                          dense
+                          title="Delete choice"
+                          onClick={() => handleChoiceDelete(choice)}
+                        >
                           <ListItemText primary={choice} />
                         </ListItemButton>
                       </ListItem>
@@ -249,11 +306,16 @@ export default function DemoForm() {
                   render={({ field, fieldState: { error } }) => {
                     return (
                       <FormControl error={error} size="small" fullWidth>
-                        <Select {...field} onChange={(e) => {
-                          field.onChange(e);
-                          handleChoiceOrdering(e.target.value)
-                        }}>
-                          <MenuItem value={1}>Display Choice in Alphabetical order</MenuItem>
+                        <Select
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleChoiceOrdering(e.target.value);
+                          }}
+                        >
+                          <MenuItem value={1}>
+                            Display Choice in Alphabetical order
+                          </MenuItem>
                           <MenuItem value={0}>No Order</MenuItem>
                         </Select>
                         <FormHelperText>{error?.message}</FormHelperText>
@@ -269,7 +331,13 @@ export default function DemoForm() {
                     variant="contained"
                     disabled={loading}
                     type="submit"
-                    sx={{ "&.MuiButton-root": { textTransform: "capitalize", backgroundColor: '#4fb725', }, mr: 2 }}
+                    sx={{
+                      "&.MuiButton-root": {
+                        textTransform: "capitalize",
+                        backgroundColor: "#4fb725",
+                      },
+                      mr: 2,
+                    }}
                   >
                     {loading && <CircularProgress size={24} />}
                     Save Changes
