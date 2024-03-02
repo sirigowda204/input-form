@@ -44,6 +44,9 @@ const defaultValues = {
 };
 
 export default function DemoForm() {
+  
+  // useForm hook is used to initialize the form with default values and schema validation
+  // useForm returns various methods and properties that are essential for managing form state
   const {
     handleSubmit,
     control,
@@ -57,16 +60,21 @@ export default function DemoForm() {
     resolver: yupResolver(schema),
   });
 
+  // State to manage loading state of form submission
   const [loading, setLoading] = useState(false);
 
+  // Watch for changes in the "choices" field and store its current value
   const watchChoices = watch("choices");
 
+  // Function to handle form submission
+  // Validates if default value is present in choices
+  // Sends form data to server via fetch API
   function onSave(data) {
-    const isDefaultIsPresent = data.choices.find(
+    const isDefaultPresent = data.choices.find(
       (c) => c === data.default.trim()
     );
 
-    if (!isDefaultIsPresent) {
+    if (!isDefaultPresent) {
       alert("default value should be present in the choice");
       return;
     }
@@ -74,6 +82,9 @@ export default function DemoForm() {
 
     const url = "http://www.mocky.io/v2/566061f21200008e3aabd919";
     setLoading(true);
+
+    // HTTP POST request to send form data to a server, handles the response and errors accordingly
+    // Updates the loading state to indicate the status of the form submission.
     fetch(url, {
       method: "POST",
       headers: {
@@ -99,8 +110,7 @@ export default function DemoForm() {
     console.log(reqBody);
   }
 
-  // handles addition of new choices
-  // and also provides validation before addition
+  // Handles addition of new choices and provides validation before addition
   function handleAddChoice() {
     const enterDefault = getValues("default");
     if (!enterDefault.trim()) {
@@ -115,7 +125,7 @@ export default function DemoForm() {
 
     const isDuplicate = watchChoices.find((c) => c === enterDefault.trim());
     if (isDuplicate) {
-      alert("Enter text is already present in the choice list");
+      alert("Entered text is already present in the choice list");
       setValue("default", "");
       return;
     }
@@ -123,6 +133,7 @@ export default function DemoForm() {
     setValue("choices", [...getValues("choices"), enterDefault]);
   }
 
+  // Handles deletion of choices
   function handleChoiceDelete(choice) {
     const filterChoices = watchChoices.filter(
       (elChoice) => elChoice !== choice
@@ -130,6 +141,7 @@ export default function DemoForm() {
     setValue("choices", filterChoices);
   }
 
+  // Function to handle ordering of choices
   function handleChoiceOrdering(order) {
     const choicesCopy = [...watchChoices];
     if (order === 1) {
@@ -138,6 +150,7 @@ export default function DemoForm() {
     setValue("choices", choicesCopy);
   }
 
+  // Main JSX content of the component, which defines the layout and components of the form
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit(onSave)}>
